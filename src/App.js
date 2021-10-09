@@ -7,6 +7,11 @@ const client = new W3CWebSocket(address);
 
 function App() {
   const [messages, setMessages] = useState([]);
+  const [currentMessage, setCurrentMessage] = useState("bla");
+
+  const bla = (message) => {
+    setMessages([...messages, message]);
+  };
 
   useEffect(() => {
     client.onopen = (connection) => {
@@ -15,25 +20,32 @@ function App() {
     client.onmessage = (message) => {
       console.log("recieved message from socket");
       console.log(message);
-      setMessages([...messages, message]);
+      bla(message);
     };
   });
 
   const handleButtonPress = () => {
     console.log("clicky");
-    client.send("bla");
+    client.send(currentMessage);
   };
 
   const createMessageDivs = () =>
-    messages.map((message) => {
-      return <div>{message.data}</div>;
+    messages.map((message, index) => {
+      return <div key={index}>{message.data}</div>;
     });
 
   return (
     <div>
-      Practical Intro To WebSockets.
-      <div>test2</div>
+      {`Best message app ever`}
+      <br></br>
+      <input
+        onChange={(e) => {
+          setCurrentMessage(e.target.value);
+        }}
+      ></input>
+      <br></br>
       <button onClick={() => handleButtonPress()}>send message</button>
+      <div>{`Messages: `}</div>
       {createMessageDivs()}
     </div>
   );
