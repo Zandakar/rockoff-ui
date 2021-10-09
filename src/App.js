@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 const address = "ws://54.206.45.48:8000";
@@ -9,9 +9,7 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [currentMessage, setCurrentMessage] = useState("bla");
 
-  const bla = (message) => {
-    setMessages([...messages, message]);
-  };
+  const bla = useRef();
 
   useEffect(() => {
     client.onopen = (connection) => {
@@ -20,13 +18,14 @@ function App() {
     client.onmessage = (message) => {
       console.log("recieved message from socket");
       console.log(message);
-      bla(message);
+      setMessages([...messages, message]);
     };
   });
 
   const handleButtonPress = () => {
     console.log("clicky");
     client.send(currentMessage);
+    setCurrentMessage("");
   };
 
   const createMessageDivs = () =>
@@ -39,12 +38,15 @@ function App() {
       {`Best message app ever`}
       <br></br>
       <input
+        value={currentMessage}
         onChange={(e) => {
           setCurrentMessage(e.target.value);
         }}
       ></input>
       <br></br>
-      <button onClick={() => handleButtonPress()}>send message</button>
+      <button ref={bla} onClick={() => handleButtonPress()}>
+        send message
+      </button>
       <div>{`Messages: `}</div>
       {createMessageDivs()}
     </div>
