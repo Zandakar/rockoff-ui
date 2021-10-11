@@ -71,6 +71,7 @@ function App() {
         }}
       ></input>
       <br></br>
+      <div>{`Message:`}</div>
       <input
         value={currentMessage}
         onChange={(e) => {
@@ -81,7 +82,7 @@ function App() {
       <button ref={bla} onClick={() => handleSendMessage()}>
         send message
       </button>
-      <div>{`Messages: `}</div>
+      <div>{`All Messages: `}</div>
       {createMessageDivs()}
     </div>
   );
