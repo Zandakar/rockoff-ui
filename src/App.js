@@ -9,6 +9,7 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [currentMessage, setCurrentMessage] = useState("");
   const [clientId, setClientId] = useState("");
+  const [displayName, setDisplayName] = useState("New User");
 
   const bla = useRef();
 
@@ -37,10 +38,14 @@ function App() {
     };
   });
 
-  const handleButtonPress = () => {
+  const handleSendMessage = () => {
     console.log("clicky");
     try {
-      const payload = JSON.stringify({ message: currentMessage, clientId });
+      const payload = JSON.stringify({
+        message: currentMessage,
+        clientId,
+        displayName,
+      });
       client.send(payload);
 
       setCurrentMessage("");
@@ -58,6 +63,14 @@ function App() {
     <div>
       {`Best message app ever`}
       <br></br>
+      <div>{`Display name:`}</div>
+      <input
+        value={displayName}
+        onChange={(e) => {
+          setDisplayName(e.target.value);
+        }}
+      ></input>
+      <br></br>
       <input
         value={currentMessage}
         onChange={(e) => {
@@ -65,7 +78,7 @@ function App() {
         }}
       ></input>
       <br></br>
-      <button ref={bla} onClick={() => handleButtonPress()}>
+      <button ref={bla} onClick={() => handleSendMessage()}>
         send message
       </button>
       <div>{`Messages: `}</div>
