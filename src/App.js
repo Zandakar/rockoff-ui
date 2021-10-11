@@ -5,8 +5,17 @@ const address = "ws://54.206.45.48:8000";
 
 const client = new W3CWebSocket(address);
 
+/*
+Sessions:
+- Player clicks create game
+  - add to list of active games.
+  - Create sharable url
+- Friend clicks link, server pairs players up
+- Game starts
+*/
+
 function App(props) {
-  const [messages, setMessages] = useState([]);
+  const [allMessages, setAllMessages] = useState([]);
   const [currentMessage, setCurrentMessage] = useState("");
   const [clientId, setClientId] = useState("");
   const [displayName, setDisplayName] = useState("New User");
@@ -27,7 +36,7 @@ function App(props) {
       try {
         const parsedMessage = JSON.parse(data);
         if (parsedMessage.message) {
-          setMessages([...messages, parsedMessage.message]);
+          setAllMessages([...allMessages, parsedMessage.message]);
         }
 
         if (parsedMessage.connection) {
@@ -58,7 +67,7 @@ function App(props) {
   };
 
   const createMessageDivs = () =>
-    messages.map((message, index) => {
+    allMessages.map((message, index) => {
       return <div key={index}>{message}</div>;
     });
 
