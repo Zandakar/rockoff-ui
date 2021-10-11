@@ -15,10 +15,15 @@ function App() {
     client.onopen = (connection) => {
       console.log("WebSocket Client Connected");
     };
-    client.onmessage = (message) => {
-      console.log("recieved message from socket");
-      console.log(message);
-      setMessages([...messages, message]);
+    client.onmessage = ({ data } = {}) => {
+      try {
+        const parsedMessage = JSON.parse(data);
+        if (parsedMessage.message) {
+          setMessages([...messages, parsedMessage.message]);
+        }
+      } catch (e) {
+        console.error(e);
+      }
     };
   });
 
@@ -30,7 +35,7 @@ function App() {
 
   const createMessageDivs = () =>
     messages.map((message, index) => {
-      return <div key={index}>{message.data}</div>;
+      return <div key={index}>{message}</div>;
     });
 
   return (
