@@ -5,13 +5,16 @@ const address = "ws://54.206.45.48:8000";
 
 const client = new W3CWebSocket(address);
 
-function App() {
+function App(props) {
   const [messages, setMessages] = useState([]);
   const [currentMessage, setCurrentMessage] = useState("");
   const [clientId, setClientId] = useState("");
   const [displayName, setDisplayName] = useState("New User");
 
-  const bla = useRef();
+  const urlParams = window.location.href.split("/").splice(3);
+
+  console.log(`---------- urlParams ----------`);
+  console.log(urlParams);
 
   useEffect(() => {
     client.onopen = (connection) => {
@@ -79,9 +82,7 @@ function App() {
         }}
       ></input>
       <br></br>
-      <button ref={bla} onClick={() => handleSendMessage()}>
-        send message
-      </button>
+      <button onClick={() => handleSendMessage()}>send message</button>
       <div>{`All Messages: `}</div>
       {createMessageDivs()}
     </div>
