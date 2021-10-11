@@ -7,19 +7,29 @@ const client = new W3CWebSocket(address);
 
 function App() {
   const [messages, setMessages] = useState([]);
-  const [currentMessage, setCurrentMessage] = useState("bla");
+  const [currentMessage, setCurrentMessage] = useState("");
+  const [clientId, setClientId] = useState("");
 
   const bla = useRef();
 
   useEffect(() => {
     client.onopen = (connection) => {
       console.log("WebSocket Client Connected");
+      console.log(connection);
     };
     client.onmessage = ({ data } = {}) => {
+      console.log("message data");
+      console.log(data);
       try {
         const parsedMessage = JSON.parse(data);
         if (parsedMessage.message) {
           setMessages([...messages, parsedMessage.message]);
+        }
+
+        if (parsedMessage.connection) {
+          if (parsedMessage.connection === "ok") {
+            setClientId(parsedMessage.clientId);
+          }
         }
       } catch (e) {
         console.error(e);
@@ -29,8 +39,14 @@ function App() {
 
   const handleButtonPress = () => {
     console.log("clicky");
-    client.send(currentMessage);
-    setCurrentMessage("");
+    try {
+      const payload = JSON.stringify({ message: currentMessage, clientId });
+      client.send(payload);
+
+      setCurrentMessage("");
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const createMessageDivs = () =>
