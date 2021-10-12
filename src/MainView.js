@@ -1,10 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
-import { w3cwebsocket as W3CWebSocket } from "websocket";
-
-const address = "ws://54.206.45.48:8000";
-
-const client = new W3CWebSocket(address);
 
 /*
 Sessions:
@@ -24,41 +19,14 @@ const generateGameId = () => {
   return s4() + "-" + s4() + "-" + s4();
 };
 
-function MainView(props) {
-  const [allMessages, setAllMessages] = useState([]);
+function MainView({ client, clientId, allMessages }) {
   const [currentMessage, setCurrentMessage] = useState("");
-  const [clientId, setClientId] = useState("");
   const [displayName, setDisplayName] = useState("New User");
 
   const history = useHistory();
 
-  console.log(`---------- mainview props ----------`);
-  console.log(props);
-
-  useEffect(() => {
-    client.onopen = (connection) => {
-      console.log("WebSocket Client Connected");
-      console.log(connection);
-    };
-    client.onmessage = ({ data } = {}) => {
-      console.log("message data");
-      console.log(data);
-      try {
-        const parsedMessage = JSON.parse(data);
-        if (parsedMessage.message) {
-          setAllMessages([...allMessages, parsedMessage.message]);
-        }
-
-        if (parsedMessage.connection) {
-          if (parsedMessage.connection === "ok") {
-            setClientId(parsedMessage.clientId);
-          }
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    };
-  });
+  console.log(`---------- clientId ----------`);
+  console.log(clientId);
 
   const handleSendMessage = () => {
     console.log("clicky");
