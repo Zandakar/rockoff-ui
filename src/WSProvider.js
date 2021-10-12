@@ -9,10 +9,5 @@ const client = new W3CWebSocket(address);
 export default function WSHandler(props = {}) {
   console.log("WSHandler");
 
-  console.log("props");
-  console.log(props);
-
-  const value = "My Context Value";
-
   return <div>{React.cloneElement(props.children, { test: true })}</div>;
 }

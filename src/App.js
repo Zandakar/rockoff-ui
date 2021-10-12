@@ -5,21 +5,25 @@ import WSProvider from "./WSProvider";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 export default function App(props) {
+  const WSProviderWrapper = (view, path) => {
+    return (
+      <Route path={path}>
+        <WSProvider>{view}</WSProvider>
+      </Route>
+    );
+  };
+
   return (
-    <Router>
-      <li>
-        <Link to="/">Home</Link>
-      </li>
-      <Switch>
-        <Route path="/game/*">
-          <Gameview></Gameview>
-        </Route>
-        <Route path="/">
-          <WSProvider>
-            <MainView></MainView>
-          </WSProvider>
-        </Route>
-      </Switch>
-    </Router>
+    <WSProvider>
+      <Router>
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        <Switch>
+          {WSProviderWrapper(<Gameview></Gameview>, "/game/*")}
+          {WSProviderWrapper(<MainView></MainView>, "/")}
+        </Switch>
+      </Router>
+    </WSProvider>
   );
 }

@@ -30,11 +30,6 @@ function MainView(props) {
   const [clientId, setClientId] = useState("");
   const [displayName, setDisplayName] = useState("New User");
 
-  const context = useContext("UserContext");
-
-  console.log(`---------- context ----------`);
-  console.log(context);
-
   const history = useHistory();
 
   console.log(`---------- mainview props ----------`);
