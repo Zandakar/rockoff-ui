@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { generateId } from "../helperFuncs";
 
 /*
 Sessions:
@@ -10,53 +11,27 @@ Sessions:
 - Game starts
 */
 
-const generateGameId = () => {
-  function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
-  }
-  return s4() + "-" + s4() + "-" + s4();
-};
-
-function MainView({ client, clientId, allMessages }) {
+function HomeView({ allMessages, sendMessage, displayName, setDisplayName }) {
   const [currentMessage, setCurrentMessage] = useState("");
-  const [displayName, setDisplayName] = useState("New User");
-
   const history = useHistory();
-
-  console.log(`---------- clientId ----------`);
-  console.log(clientId);
 
   const handleSendMessage = () => {
     console.log("clicky");
-    try {
-      const payload = JSON.stringify({
-        message: currentMessage,
-        clientId,
-        displayName,
-      });
-      client.send(payload);
+    sendMessage(currentMessage);
+    setCurrentMessage("");
+  };
 
-      setCurrentMessage("");
-    } catch (e) {
-      console.error(e);
-    }
+  const handleNewGame = () => {
+    console.log("handleNewGame");
+    const gameId = generateId();
+
+    history.push(`/game/${gameId}`);
   };
 
   const createMessageDivs = () =>
     allMessages.map((message, index) => {
       return <div key={index}>{message}</div>;
     });
-
-  const handleNewGame = () => {
-    console.log("handleNewGame");
-    const gameId = generateGameId();
-
-    history.push(`/game/${gameId}`);
-
-    console.log(gameId);
-  };
 
   return (
     <div>
@@ -87,4 +62,4 @@ function MainView({ client, clientId, allMessages }) {
   );
 }
 
-export default MainView;
+export default HomeView;

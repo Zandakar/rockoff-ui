@@ -8,7 +8,7 @@ const client = new W3CWebSocket(address);
 export default function WSHandler(props = {}) {
   const [allMessages, setAllMessages] = useState([]);
   const [clientId, setClientId] = useState("");
-  console.log("WSHandler");
+  const [displayName, setDisplayName] = useState("New User");
 
   client.onopen = (connection) => {
     console.log("WebSocket Client Connected");
@@ -34,9 +34,27 @@ export default function WSHandler(props = {}) {
     }
   };
 
+  const sendMessage = (message) => {
+    try {
+      const payload = JSON.stringify({
+        message,
+        clientId,
+        displayName,
+      });
+      client.send(payload);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <div>
-      {React.cloneElement(props.children, { client, clientId, allMessages })}
+      {React.cloneElement(props.children, {
+        allMessages,
+        displayName,
+        setDisplayName,
+        sendMessage,
+      })}
     </div>
   );
 }
