@@ -9,5 +9,21 @@ const client = new W3CWebSocket(address);
 export default function WSHandler() {
   console.log("WSHandler");
 
-  return client;
+  const handleSendMessage = () => {
+    console.log("clicky2");
+    // try {
+    //   const payload = JSON.stringify({
+    //     message: currentMessage,
+    //     clientId,
+    //     displayName,
+    //   });
+    //   client.send(payload);
+
+    //   setCurrentMessage("");
+    // } catch (e) {
+    //   console.error(e);
+    // }
+  };
+
+  return { client };
 }

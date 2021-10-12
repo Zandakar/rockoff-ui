@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import WSHandler from "../src/services/WSHandler";
 
-const client = WSHandler();
+const wsHandler = WSHandler();
 
 /*
 Sessions:
@@ -29,6 +29,11 @@ function MainView(props) {
   const [displayName, setDisplayName] = useState("New User");
 
   const history = useHistory();
+
+  const { client } = wsHandler;
+
+  console.log(`---------- client ----------`);
+  console.log(client);
 
   useEffect(() => {
     client.onopen = (connection) => {

@@ -15,7 +15,7 @@ export default function App(props) {
           <Gameview></Gameview>
         </Route>
         <Route path="/">
-          <MainView></MainView>;
+          <MainView></MainView>
         </Route>
       </Switch>
     </Router>
