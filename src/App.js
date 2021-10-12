@@ -14,6 +14,15 @@ Sessions:
 - Game starts
 */
 
+const generateGameId = () => {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return "game" + "-" + s4() + "-" + s4() + "-" + s4();
+};
+
 function App(props) {
   const [allMessages, setAllMessages] = useState([]);
   const [currentMessage, setCurrentMessage] = useState("");
@@ -71,6 +80,13 @@ function App(props) {
       return <div key={index}>{message}</div>;
     });
 
+  const handleNewGame = () => {
+    console.log("handleNewGame");
+    const gameId = generateGameId();
+
+    console.log(gameId);
+  };
+
   return (
     <div>
       {`Best message app ever`}
@@ -90,6 +106,8 @@ function App(props) {
           setCurrentMessage(e.target.value);
         }}
       ></input>
+      <br></br>
+      <button onClick={() => handleNewGame()}>Invite a friend</button>
       <br></br>
       <button onClick={() => handleSendMessage()}>send message</button>
       <div>{`All Messages: `}</div>
