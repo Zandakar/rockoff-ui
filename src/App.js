@@ -1,5 +1,6 @@
 import React from "react";
 import MainView from "./MainView";
+import Gameview from "./GameView";
 import {
   BrowserRouter as Router,
   Switch,
@@ -12,25 +13,18 @@ import {
 export default function App(props) {
   return (
     <Router>
-      <div>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/topics">Topics</Link>
-          </li>
-        </ul>
+      <li>
+        <Link to="/">Home</Link>
+      </li>
 
-        <Switch>
-          <Route path="/topics">
-            <div>bla</div>
-          </Route>
-          <Route path="/">
-            <MainView></MainView>;
-          </Route>
-        </Switch>
-      </div>
+      <Switch>
+        <Route path="/game/*">
+          <Gameview></Gameview>
+        </Route>
+        <Route path="/">
+          <MainView></MainView>;
+        </Route>
+      </Switch>
     </Router>
   );
 }

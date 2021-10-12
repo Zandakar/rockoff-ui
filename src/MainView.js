@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
+import { useRouteMatch, useParams, useHistory } from "react-router-dom";
 
 const address = "ws://54.206.45.48:8000";
 
@@ -20,7 +21,7 @@ const generateGameId = () => {
       .toString(16)
       .substring(1);
   }
-  return "game" + "-" + s4() + "-" + s4() + "-" + s4();
+  return s4() + "-" + s4() + "-" + s4();
 };
 
 function MainView(props) {
@@ -29,10 +30,10 @@ function MainView(props) {
   const [clientId, setClientId] = useState("");
   const [displayName, setDisplayName] = useState("New User");
 
-  const urlParams = window.location.href.split("/").splice(3);
+  const history = useHistory();
 
-  console.log(`---------- urlParams ----------`);
-  console.log(urlParams);
+  console.log(`---------- useHistory() ----------`);
+  console.log(history);
 
   useEffect(() => {
     client.onopen = (connection) => {
@@ -83,6 +84,8 @@ function MainView(props) {
   const handleNewGame = () => {
     console.log("handleNewGame");
     const gameId = generateGameId();
+
+    history.push(`/game/${gameId}`);
 
     console.log(gameId);
   };
