@@ -1,10 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
-import { w3cwebsocket as W3CWebSocket } from "websocket";
-import { useRouteMatch, useParams, useHistory } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import WSHandler from "../src/services/WSHandler";
 
-const address = "ws://54.206.45.48:8000";
-
-const client = new W3CWebSocket(address);
+const client = WSHandler();
 
 /*
 Sessions:
@@ -31,9 +29,6 @@ function MainView(props) {
   const [displayName, setDisplayName] = useState("New User");
 
   const history = useHistory();
-
-  console.log(`---------- useHistory() ----------`);
-  console.log(history);
 
   useEffect(() => {
     client.onopen = (connection) => {

@@ -1,14 +1,7 @@
 import React from "react";
 import MainView from "./MainView";
 import Gameview from "./GameView";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useRouteMatch,
-  useParams,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 export default function App(props) {
   return (
