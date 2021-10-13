@@ -22,6 +22,7 @@ const DISPLAYNAME_STORE = "displayName";
 export default function WSHandler(props = {}) {
   const [clientId, setClientId] = useState("");
   const [displayName, setDisplayName] = useState("");
+  const [game, setGame] = useState({});
 
   const history = useHistory();
 
@@ -62,7 +63,7 @@ export default function WSHandler(props = {}) {
     console.log("receiving data from server:");
     console.log(data);
     try {
-      const { command = "", clientId = "", ...rest } = JSON.parse(data);
+      const { command = "", clientId = "", params } = JSON.parse(data);
 
       if (command === COMMANDS.CONNECTED) {
         setClientId(clientId);
@@ -70,11 +71,13 @@ export default function WSHandler(props = {}) {
       }
 
       if (command === COMMANDS.GAME_CREATED) {
-        history.push(`/game/${rest.gameId}`);
+        console.log(`---------- params ----------`);
+        console.log(params);
+        history.push(`/game/${params.gameId}`);
       }
 
       if (command === COMMANDS.GAME_MATCH_FOUND) {
-        console.log(rest);
+        setGame(params);
       }
     } catch (e) {
       console.error(e);
@@ -82,6 +85,10 @@ export default function WSHandler(props = {}) {
   };
 
   const sendMessage = (command = "", params = {}) => {
+    if (!command) {
+      console.error("Trying to send a message without a command");
+    }
+
     if (client.readyState === 0 || !clientId) {
       const messageParams = { command, params };
       messageBuffer.unshift(messageParams);
@@ -105,6 +112,7 @@ export default function WSHandler(props = {}) {
         displayName,
         setDisplayName,
         sendMessage,
+        game,
       })}
     </div>
   );
