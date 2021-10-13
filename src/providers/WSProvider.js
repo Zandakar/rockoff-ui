@@ -35,7 +35,7 @@ export default function WSHandler(props = {}) {
   };
 
   client.onmessage = ({ data } = {}) => {
-    console.log("onmessage data");
+    console.log("receiving data from server:");
     console.log(data);
     try {
       const { command = "", clientId = "", ...rest } = JSON.parse(data);
