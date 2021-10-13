@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { generateId } from "../helperFuncs";
+import React from "react";
 import Button from "@mui/material/Button";
+import { COMMANDS } from "../providers/WSProvider";
 
 /*
 Sessions:
@@ -12,10 +11,10 @@ Sessions:
 - Game starts
 */
 
-function HomeView({ allMessages, sendMessage, displayName, setDisplayName }) {
+function HomeView({ sendMessage, displayName, setDisplayName }) {
   const handleNewGame = () => {
     console.log("handleNewGame");
-    sendMessage("CREATE_GAME");
+    sendMessage(COMMANDS.CREATE_GAME);
   };
 
   return (

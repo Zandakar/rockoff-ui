@@ -5,15 +5,14 @@ const address = "ws://54.206.45.48:8000";
 
 const client = new W3CWebSocket(address);
 
-const COMMANDS = {
-  CLIENT_ACK: "CLIENT_ACK",
+export const COMMANDS = {
+  CLIENT_CONNECTED_ACK: "CLIENT_CONNECTED_ACK",
   CONNECTED: "CONNECTED",
   CREATE_GAME: "CREATE_GAME",
   GAME_CREATED: "GAME_CREATED",
 };
 
 export default function WSHandler(props = {}) {
-  const [allMessages, setAllMessages] = useState([]);
   const [clientId, setClientId] = useState("");
   const [displayName, setDisplayName] = useState("New User");
 
@@ -25,14 +24,16 @@ export default function WSHandler(props = {}) {
   };
 
   client.onmessage = ({ data } = {}) => {
-    console.log("message data");
+    console.log("onmessage data");
     console.log(data);
     try {
-      const parsedMessage = JSON.parse(data);
+      const { command = "", clientId = "" } = JSON.parse(data);
 
-      if (parsedMessage.command === COMMANDS.CONNECTED) {
-        setClientId(parsedMessage.clientId);
-        sendMessage(COMMANDS.CLIENT_ACK, {}, parsedMessage.clientId);
+      if (command === COMMANDS.CONNECTED) {
+        setClientId(clientId);
+        // Sending CLIENT_CONNECTED_ACK from a CONNECTED event throws errors that it's too soon
+        // Need to set clientId manually
+        sendMessage(COMMANDS.CLIENT_CONNECTED_ACK, {}, clientId);
       }
     } catch (e) {
       console.error(e);
