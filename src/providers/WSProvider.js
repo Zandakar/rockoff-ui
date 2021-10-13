@@ -14,26 +14,26 @@ export const COMMANDS = {
   GAME_JOINED: "GAME_JOINED",
 };
 
+const messageBuffer = [];
+
 export default function WSHandler(props = {}) {
   const [clientId, setClientId] = useState("");
   const [displayName, setDisplayName] = useState("New User");
-  const [messageBuffer, setMessageBuffer] = useState([]);
 
   const history = useHistory();
 
   console.log(client);
 
   useEffect(() => {
-    if (client.readyState === 1) {
+    if (client.readyState === 1 && clientId) {
       messageBuffer.forEach((params) => {
         sendMessage({ ...params });
       });
     }
-  }, [client.readyState]);
+  }, [client.readyState, clientId]);
 
   client.onopen = (WebSocket) => {
     console.log("WebSocket Client Connected");
-    console.log(client.readyState);
   };
 
   client.onmessage = ({ data } = {}) => {
@@ -44,9 +44,7 @@ export default function WSHandler(props = {}) {
 
       if (command === COMMANDS.CONNECTED) {
         setClientId(clientId);
-        // Sending CLIENT_CONNECTED_ACK from a CONNECTED event throws errors that it's too soon
-        // Need to supply clientId manually here
-        sendMessage(COMMANDS.CLIENT_CONNECTED_ACK, {}, clientId);
+        sendMessage(COMMANDS.CLIENT_CONNECTED_ACK);
       }
 
       if (command === COMMANDS.GAME_CREATED) {
@@ -57,16 +55,19 @@ export default function WSHandler(props = {}) {
     }
   };
 
-  const sendMessage = (command = "", params = {}, clientIdBootstrap = "") => {
-    if (client.readyState === 0) {
-      const messageParams = { command, params, clientId };
-      setMessageBuffer([...messageBuffer, messageParams]);
+  const sendMessage = (command = "", params = {}) => {
+    console.log(command);
+    console.log(clientId);
+    if (client.readyState === 0 || !clientId) {
+      console.log("caching");
+      const messageParams = { command, params };
+      messageBuffer.unshift(messageParams);
     } else {
       try {
         const payload = JSON.stringify({
           ...params,
           command,
-          clientId: clientId ? clientId : clientIdBootstrap,
+          clientId,
         });
         client.send(payload);
       } catch (e) {
