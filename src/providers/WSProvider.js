@@ -5,10 +5,19 @@ const address = "ws://54.206.45.48:8000";
 
 const client = new W3CWebSocket(address);
 
+const COMMANDS = {
+  CLIENT_ACK: "CLIENT_ACK",
+  CONNECTED: "CONNECTED",
+  CREATE_GAME: "CREATE_GAME",
+  GAME_CREATED: "GAME_CREATED",
+};
+
 export default function WSHandler(props = {}) {
   const [allMessages, setAllMessages] = useState([]);
   const [clientId, setClientId] = useState("");
   const [displayName, setDisplayName] = useState("New User");
+
+  console.log(client);
 
   client.onopen = (connection) => {
     console.log("WebSocket Client Connected");
@@ -20,30 +29,21 @@ export default function WSHandler(props = {}) {
     console.log(data);
     try {
       const parsedMessage = JSON.parse(data);
-      if (parsedMessage.message) {
-        setAllMessages([...allMessages, parsedMessage.message]);
-      }
 
-      if (parsedMessage.connection) {
-        if (parsedMessage.connection === "ok") {
-          setClientId(parsedMessage.clientId);
-          sendMessage(
-            {
-              command: "CLIENT_ACK",
-            },
-            parsedMessage.clientId
-          );
-        }
+      if (parsedMessage.command === COMMANDS.CONNECTED) {
+        setClientId(parsedMessage.clientId);
+        sendMessage(COMMANDS.CLIENT_ACK, {}, parsedMessage.clientId);
       }
     } catch (e) {
       console.error(e);
     }
   };
 
-  const sendMessage = (params = {}, clientIdBootstrap = "") => {
+  const sendMessage = (command = "", params = {}, clientIdBootstrap = "") => {
     try {
       const payload = JSON.stringify({
         ...params,
+        command,
         clientId: clientId ? clientId : clientIdBootstrap,
       });
       client.send(payload);
@@ -55,7 +55,6 @@ export default function WSHandler(props = {}) {
   return (
     <div>
       {React.cloneElement(props.children, {
-        allMessages,
         displayName,
         setDisplayName,
         sendMessage,

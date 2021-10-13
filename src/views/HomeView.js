@@ -15,7 +15,7 @@ Sessions:
 function HomeView({ allMessages, sendMessage, displayName, setDisplayName }) {
   const handleNewGame = () => {
     console.log("handleNewGame");
-    sendMessage({ command: "CREATE_GAME" });
+    sendMessage("CREATE_GAME");
   };
 
   return (
