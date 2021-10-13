@@ -15,12 +15,35 @@ export const COMMANDS = {
 };
 
 const messageBuffer = [];
+const DEFAULT_DISPLAY_NAME = "New Player";
 
 export default function WSHandler(props = {}) {
   const [clientId, setClientId] = useState("");
-  const [displayName, setDisplayName] = useState("New User");
+  const [displayName, setDisplayName] = useState("");
 
   const history = useHistory();
+
+  useEffect(() => {
+    const storedDisplayname = window.localStorage.getItem("displayName");
+
+    if (storedDisplayname !== displayName) {
+      if (!storedDisplayname) {
+        setDisplayName(DEFAULT_DISPLAY_NAME);
+        window.localStorage.setItem("displayName", DEFAULT_DISPLAY_NAME);
+      } else {
+        setDisplayName(storedDisplayname);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const storedDisplayname = window.localStorage.getItem("displayName");
+
+    if (storedDisplayname !== displayName) {
+      console.log("setting dis name");
+      window.localStorage.setItem("displayName", displayName);
+    }
+  }, [displayName]);
 
   useEffect(() => {
     if (client.readyState === 1 && clientId) {
