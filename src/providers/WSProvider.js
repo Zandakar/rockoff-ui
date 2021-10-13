@@ -26,8 +26,8 @@ export default function WSHandler(props = {}) {
 
   useEffect(() => {
     if (client.readyState === 1 && clientId) {
-      messageBuffer.forEach((params) => {
-        sendMessage({ ...params });
+      messageBuffer.forEach(({ command = "", params = {} }) => {
+        sendMessage(command, params);
       });
     }
   }, [client.readyState, clientId]);
@@ -56,10 +56,7 @@ export default function WSHandler(props = {}) {
   };
 
   const sendMessage = (command = "", params = {}) => {
-    console.log(command);
-    console.log(clientId);
     if (client.readyState === 0 || !clientId) {
-      console.log("caching");
       const messageParams = { command, params };
       messageBuffer.unshift(messageParams);
     } else {
