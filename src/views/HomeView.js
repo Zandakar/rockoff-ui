@@ -13,24 +13,10 @@ Sessions:
 */
 
 function HomeView({ allMessages, sendMessage, displayName, setDisplayName }) {
-  // const handleSendMessage = () => {
-  //   console.log("clicky");
-  //   sendMessage(currentMessage);
-  //   setCurrentMessage("");
-  // };
-
   const handleNewGame = () => {
     console.log("handleNewGame");
-    sendMessage({ command: "INVITE" });
-    // const gameId = generateId();
-
-    // history.push(`/invite/${gameId}`);
+    sendMessage({ command: "CREATE_GAME" });
   };
-
-  const createMessageDivs = () =>
-    allMessages.map((message, index) => {
-      return <div key={index}>{message}</div>;
-    });
 
   return (
     <div>
@@ -43,23 +29,11 @@ function HomeView({ allMessages, sendMessage, displayName, setDisplayName }) {
         }}
       ></input>
       <br></br>
-      {/* <div>{`Message:`}</div> */}
-      {/* <input
-        value={currentMessage}
-        onChange={(e) => {
-          setCurrentMessage(e.target.value);
-        }}
-      ></input> */}
       <br></br>
       <Button variant="contained" onClick={() => handleNewGame()}>
         VS. a friend
       </Button>
       <br></br>
-      {/* <Button variant="contained" onClick={() => handleSendMessage()}>
-        send message
-      </Button> */}
-      {/* <div>{`All Messages: `}</div>
-      {createMessageDivs()} */}
     </div>
   );
 }
