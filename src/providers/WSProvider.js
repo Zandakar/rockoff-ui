@@ -22,8 +22,6 @@ export default function WSHandler(props = {}) {
 
   const history = useHistory();
 
-  console.log(client);
-
   useEffect(() => {
     if (client.readyState === 1 && clientId) {
       messageBuffer.forEach(({ command = "", params = {} }) => {
@@ -62,7 +60,7 @@ export default function WSHandler(props = {}) {
     } else {
       try {
         const payload = JSON.stringify({
-          ...params,
+          params,
           command,
           clientId,
         });

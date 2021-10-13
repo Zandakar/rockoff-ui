@@ -1,12 +1,16 @@
 import React, { useEffect } from "react";
 import { COMMANDS } from "../providers/WSProvider";
+import { useParams } from "react-router-dom";
 
 export default function Gameview({ sendMessage }) {
-  useEffect(() => {
-    sendMessage(COMMANDS.GAME_JOINED);
-  }, []);
-
   const gameUrl = window.location.href;
+  const gameId = useParams()[0];
+
+  console.log(gameId);
+
+  useEffect(() => {
+    sendMessage(COMMANDS.GAME_JOINED, { gameId });
+  }, []);
 
   return (
     <div>
