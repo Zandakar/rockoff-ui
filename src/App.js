@@ -3,12 +3,11 @@ import HomeView from "./views/HomeView";
 import Gameview from "./views/GameView";
 import WSProvider from "./providers/WSProvider";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { Toolbar } from "@mui/material";
 
 export default function App() {
-  const WSProviderWrapper = (view, path) => (
-    <Route path={path}>
-      <WSProvider>{view}</WSProvider>
+  const WSProviderWrapper = (viewComponent, routePath) => (
+    <Route path={routePath}>
+      <WSProvider>{viewComponent}</WSProvider>
     </Route>
   );
 

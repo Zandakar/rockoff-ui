@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 const address = "ws://54.206.45.48:8000";
@@ -27,6 +27,12 @@ export default function WSHandler(props = {}) {
       if (parsedMessage.connection) {
         if (parsedMessage.connection === "ok") {
           setClientId(parsedMessage.clientId);
+          sendMessage(
+            {
+              command: "CLIENT_ACK",
+            },
+            parsedMessage.clientId
+          );
         }
       }
     } catch (e) {
@@ -34,12 +40,11 @@ export default function WSHandler(props = {}) {
     }
   };
 
-  const sendMessage = (message) => {
+  const sendMessage = (params = {}, clientIdBootstrap = "") => {
     try {
       const payload = JSON.stringify({
-        message,
-        clientId,
-        displayName,
+        ...params,
+        clientId: clientId ? clientId : clientIdBootstrap,
       });
       client.send(payload);
     } catch (e) {

@@ -13,9 +13,6 @@ Sessions:
 */
 
 function HomeView({ allMessages, sendMessage, displayName, setDisplayName }) {
-  const [currentMessage, setCurrentMessage] = useState("");
-  const history = useHistory();
-
   // const handleSendMessage = () => {
   //   console.log("clicky");
   //   sendMessage(currentMessage);
