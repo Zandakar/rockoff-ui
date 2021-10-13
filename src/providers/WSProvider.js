@@ -12,10 +12,12 @@ export const COMMANDS = {
   CREATE_GAME: "CREATE_GAME",
   GAME_CREATED: "GAME_CREATED",
   GAME_JOINED: "GAME_JOINED",
+  GAME_MATCH_FOUND: "GAME_MATCH_FOUND",
 };
 
 const messageBuffer = [];
 const DEFAULT_DISPLAY_NAME = "New Player";
+const DISPLAYNAME_STORE = "displayName";
 
 export default function WSHandler(props = {}) {
   const [clientId, setClientId] = useState("");
@@ -24,12 +26,12 @@ export default function WSHandler(props = {}) {
   const history = useHistory();
 
   useEffect(() => {
-    const storedDisplayname = window.localStorage.getItem("displayName");
+    const storedDisplayname = window.localStorage.getItem(DISPLAYNAME_STORE);
 
     if (storedDisplayname !== displayName) {
       if (!storedDisplayname) {
         setDisplayName(DEFAULT_DISPLAY_NAME);
-        window.localStorage.setItem("displayName", DEFAULT_DISPLAY_NAME);
+        window.localStorage.setItem(DISPLAYNAME_STORE, DEFAULT_DISPLAY_NAME);
       } else {
         setDisplayName(storedDisplayname);
       }
@@ -37,11 +39,10 @@ export default function WSHandler(props = {}) {
   }, []);
 
   useEffect(() => {
-    const storedDisplayname = window.localStorage.getItem("displayName");
+    const storedDisplayname = window.localStorage.getItem(DISPLAYNAME_STORE);
 
     if (storedDisplayname !== displayName) {
-      console.log("setting dis name");
-      window.localStorage.setItem("displayName", displayName);
+      window.localStorage.setItem(DISPLAYNAME_STORE, displayName);
     }
   }, [displayName]);
 
@@ -70,6 +71,10 @@ export default function WSHandler(props = {}) {
 
       if (command === COMMANDS.GAME_CREATED) {
         history.push(`/game/${rest.gameId}`);
+      }
+
+      if (command === COMMANDS.GAME_MATCH_FOUND) {
+        console.log(rest);
       }
     } catch (e) {
       console.error(e);
