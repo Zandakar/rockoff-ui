@@ -1,12 +1,10 @@
-import { useHistory } from "react-router-dom";
+import React, { useEffect } from "react";
+import { COMMANDS } from "../providers/WSProvider";
 
-export default function Gameview(props) {
-  const history = useHistory();
-
-  console.log(`---------- history----------`);
-  console.log(history.location);
-
-  console.log(window.location.href);
+export default function Gameview({ sendMessage }) {
+  useEffect(() => {
+    sendMessage(COMMANDS.GAME_JOINED);
+  }, []);
 
   const gameUrl = window.location.href;
 
