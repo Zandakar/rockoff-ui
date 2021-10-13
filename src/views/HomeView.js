@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { generateId } from "../helperFuncs";
+import Button from "@mui/material/Button";
 
 /*
 Sessions:
@@ -15,17 +16,18 @@ function HomeView({ allMessages, sendMessage, displayName, setDisplayName }) {
   const [currentMessage, setCurrentMessage] = useState("");
   const history = useHistory();
 
-  const handleSendMessage = () => {
-    console.log("clicky");
-    sendMessage(currentMessage);
-    setCurrentMessage("");
-  };
+  // const handleSendMessage = () => {
+  //   console.log("clicky");
+  //   sendMessage(currentMessage);
+  //   setCurrentMessage("");
+  // };
 
   const handleNewGame = () => {
     console.log("handleNewGame");
-    const gameId = generateId();
+    sendMessage({ command: "INVITE" });
+    // const gameId = generateId();
 
-    history.push(`/game/${gameId}`);
+    // history.push(`/invite/${gameId}`);
   };
 
   const createMessageDivs = () =>
@@ -35,7 +37,6 @@ function HomeView({ allMessages, sendMessage, displayName, setDisplayName }) {
 
   return (
     <div>
-      {`Best message app ever`}
       <br></br>
       <div>{`Display name:`}</div>
       <input
@@ -45,19 +46,23 @@ function HomeView({ allMessages, sendMessage, displayName, setDisplayName }) {
         }}
       ></input>
       <br></br>
-      <div>{`Message:`}</div>
-      <input
+      {/* <div>{`Message:`}</div> */}
+      {/* <input
         value={currentMessage}
         onChange={(e) => {
           setCurrentMessage(e.target.value);
         }}
-      ></input>
+      ></input> */}
       <br></br>
-      <button onClick={() => handleNewGame()}>Invite a friend</button>
+      <Button variant="contained" onClick={() => handleNewGame()}>
+        VS. a friend
+      </Button>
       <br></br>
-      <button onClick={() => handleSendMessage()}>send message</button>
-      <div>{`All Messages: `}</div>
-      {createMessageDivs()}
+      {/* <Button variant="contained" onClick={() => handleSendMessage()}>
+        send message
+      </Button> */}
+      {/* <div>{`All Messages: `}</div>
+      {createMessageDivs()} */}
     </div>
   );
 }
