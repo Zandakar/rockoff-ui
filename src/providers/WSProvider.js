@@ -13,6 +13,7 @@ export const COMMANDS = {
   GAME_CREATED: "GAME_CREATED",
   GAME_JOINED: "GAME_JOINED",
   GAME_MATCH_FOUND: "GAME_MATCH_FOUND",
+  UPDATE_DISLAY_NAME: "UPDATE_DISLAY_NAME",
 };
 
 const messageBuffer = [];
@@ -71,7 +72,7 @@ export default function WSHandler(props = {}) {
 
       if (command === COMMANDS.CONNECTED) {
         setClientId(clientId);
-        sendMessage(COMMANDS.CLIENT_CONNECTED_ACK);
+        sendMessage(COMMANDS.CLIENT_CONNECTED_ACK, { displayName });
       }
 
       if (command === COMMANDS.GAME_CREATED) {
@@ -110,6 +111,11 @@ export default function WSHandler(props = {}) {
     }
   };
 
+  const updateDisplayName = () => {
+    console.log("updateDisplayName");
+    sendMessage(COMMANDS.UPDATE_DISLAY_NAME, { displayName });
+  };
+
   return (
     <div>
       {React.cloneElement(props.children, {
@@ -117,6 +123,7 @@ export default function WSHandler(props = {}) {
         setDisplayName,
         sendMessage,
         game,
+        updateDisplayName,
       })}
     </div>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import { COMMANDS } from "../providers/WSProvider";
 
@@ -11,7 +11,14 @@ Sessions:
 - Game starts
 */
 
-function HomeView({ sendMessage, displayName, setDisplayName }) {
+function HomeView({
+  sendMessage,
+  displayName,
+  setDisplayName,
+  updateDisplayName,
+}) {
+  const [hasChangedDisplayName, setHasChangedDisplayName] = useState(false);
+
   const handleNewGame = () => {
     console.log("handleNewGame");
     sendMessage(COMMANDS.CREATE_GAME);
@@ -25,6 +32,15 @@ function HomeView({ sendMessage, displayName, setDisplayName }) {
         value={displayName}
         onChange={(e) => {
           setDisplayName(e.target.value);
+          setHasChangedDisplayName(true);
+        }}
+        onBlur={(e) => {
+          console.log("onBlur");
+          if (hasChangedDisplayName) {
+            console.log("onBlur if");
+            updateDisplayName(e.target.value);
+            setHasChangedDisplayName(false);
+          }
         }}
       ></input>
       <br></br>
