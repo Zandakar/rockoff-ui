@@ -59,6 +59,10 @@ export default function WSHandler(props = {}) {
     console.log("WebSocket Client Connected");
   };
 
+  client.addEventListener("error", function (event) {
+    console.error("WebSocket error: ", event);
+  });
+
   client.onmessage = ({ data } = {}) => {
     console.log("receiving data from server:");
     console.log(data);
